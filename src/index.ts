@@ -17,6 +17,24 @@ let cv: CvHLines;
 let obj: Obj3D;
 let ang: number=0;
 
+window.addEventListener('DOMContentLoaded', () => {
+  // Simular carga de archivo al iniciar
+  fetch('./1aallave.txt') // Ruta relativa al archivo
+    .then(response => response.text())
+    .then(contenido => {
+      mostrarContenido(contenido);
+      obj = new Obj3D();
+      if (obj.read(contenido)) {
+        cv = new CvHLines(graphics, canvas);
+        cv.setObj(obj);
+        cv.paint();
+      }
+    })
+    .catch(error => {
+      console.error('Error al cargar el archivo:', error);
+    });
+});
+
 function leerArchivo(e:any) {
   var archivo = e.target.files[0];
   if (!archivo) {

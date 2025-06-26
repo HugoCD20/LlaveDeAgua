@@ -11,6 +11,23 @@ graphics = canvas.getContext('2d');
 var cv;
 var obj;
 var ang = 0;
+window.addEventListener('DOMContentLoaded', function () {
+    // Simular carga de archivo al iniciar
+    fetch('./1aallave.txt') // Ruta relativa al archivo
+        .then(function (response) { return response.text(); })
+        .then(function (contenido) {
+        mostrarContenido(contenido);
+        obj = new Obj3D();
+        if (obj.read(contenido)) {
+            cv = new CvHLines(graphics, canvas);
+            cv.setObj(obj);
+            cv.paint();
+        }
+    })
+        .catch(function (error) {
+        console.error('Error al cargar el archivo:', error);
+    });
+});
 function leerArchivo(e) {
     var archivo = e.target.files[0];
     if (!archivo) {

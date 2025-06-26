@@ -82,8 +82,8 @@ function decrDistFunc() {
 }
 function pza1DerFunc() {
     var af = 10;
-    Rota3D.initRotate(obj.w[139], obj.w[140], af * Math.PI / 180);
-    for (var i = 201; i <= 238; i++) {
+    Rota3D.initRotate(obj.w[313], obj.w[314], af * Math.PI / 180);
+    for (var i = 269; i <= 310; i++) {
         obj.w[i] = Rota3D.rotate(obj.w[i]);
     }
     cv.setObj(obj);

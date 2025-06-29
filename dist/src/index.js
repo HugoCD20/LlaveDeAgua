@@ -1,23 +1,32 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var _a, _b;
 //import { Input } from './Input.js';
 import { Obj3D } from './Obj3D.js';
 //import { Canvas3D } from './Canvas3D.js';
 //import { CvWireframe } from './CvWireFrame.js';
 import { CvHLines } from './CvHLines.js';
 import { Rota3D } from './Rota3D.js';
-var canvas;
-var graphics;
+let canvas;
+let graphics;
 canvas = document.getElementById('circlechart');
 graphics = canvas.getContext('2d');
-var cv;
-var obj;
-var ang = 0;
-var vueltas = 0;
-window.addEventListener('DOMContentLoaded', function () {
+let cv;
+let obj;
+let ang = 0;
+let vueltas = 0;
+window.addEventListener('DOMContentLoaded', () => {
     // Simular carga de archivo al iniciar
     fetch('./1aallave.txt') // Ruta relativa al archivo
-        .then(function (response) { return response.text(); })
-        .then(function (contenido) {
-        mostrarContenido(contenido);
+        .then(response => response.text())
+        .then(contenido => {
         obj = new Obj3D();
         if (obj.read(contenido)) {
             cv = new CvHLines(graphics, canvas);
@@ -25,7 +34,7 @@ window.addEventListener('DOMContentLoaded', function () {
             cv.paint();
         }
     })
-        .catch(function (error) {
+        .catch(error => {
         console.error('Error al cargar el archivo:', error);
     });
 });
@@ -37,7 +46,6 @@ function leerArchivo(e) {
     var lector = new FileReader();
     lector.onload = function (e) {
         var contenido = e.target.result;
-        mostrarContenido(contenido);
         obj = new Obj3D();
         if (obj.read(contenido)) {
             //sDir = sDir1;
@@ -48,16 +56,10 @@ function leerArchivo(e) {
     };
     lector.readAsText(archivo);
 }
-function mostrarContenido(contenido) {
-    var elemento = document.getElementById('contenido-archivo');
-    //
-    //readObject(new Input(contenido));
-    elemento.innerHTML = contenido;
-}
 function vp(dTheta, dPhi, fRho) {
     if (obj != undefined) {
-        var obj_1 = cv.getObj();
-        if (!obj_1.vp(cv, dTheta, dPhi, fRho))
+        let obj = cv.getObj();
+        if (!obj.vp(cv, dTheta, dPhi, fRho))
             alert('datos no validos');
     }
     else
@@ -82,10 +84,12 @@ function decrDistFunc() {
     vp(0, 0, 0.5);
 }
 function pza1DerFunc() {
-    var af = -45;
+    let af = -45;
+    const output = document.getElementById('output');
+    output.innerText = `Paso ${vueltas + 1}`;
     Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
     if (vueltas < 14) {
-        for (var i = 500; i <= 650; i++) {
+        for (let i = 500; i <= 650; i++) {
             obj.w[i] = Rota3D.subir(obj.w[i]);
         }
         cv.setObj(obj);
@@ -93,11 +97,42 @@ function pza1DerFunc() {
         vueltas++;
     }
 }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+function abrir() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const btns = document.querySelectorAll("button");
+        btns.forEach(b => b.setAttribute("disabled", "true"));
+        for (let i = 0; i < 14; i++) {
+            pza1DerFunc();
+            if (vueltas < 14) {
+                yield sleep(500); // espera 1 segundo
+            }
+        }
+        btns.forEach(b => b.removeAttribute("disabled"));
+    });
+}
+function cerrar() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const btns = document.querySelectorAll("button");
+        btns.forEach(b => b.setAttribute("disabled", "true"));
+        for (let i = 0; i < 14; i++) {
+            pza1IzqFunc();
+            if (vueltas > 0) {
+                yield sleep(500); // espera 1 segundo
+            }
+        }
+        btns.forEach(b => b.removeAttribute("disabled"));
+    });
+}
 function pza1IzqFunc() {
-    var af = 45;
+    let af = 45;
+    const output = document.getElementById('output');
+    output.innerText = `Paso ${vueltas + 1}`;
     Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
     if (vueltas > 0) {
-        for (var i = 500; i <= 650; i++) {
+        for (let i = 500; i <= 650; i++) {
             obj.w[i] = Rota3D.bajar(obj.w[i]);
         }
         cv.setObj(obj);
@@ -105,40 +140,15 @@ function pza1IzqFunc() {
         vueltas--;
     }
 }
-function pza12DerFunc() {
-    var af = 10;
-    console.log(obj.w[29], obj.w[30], obj.w[6]);
-    Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
-    for (var i = 101; i <= 140; i++) {
-    }
-    for (var i = 201; i <= 238; i++) {
-    }
-    cv.setObj(obj);
-    cv.paint();
-}
-function pza12IzqFunc() {
-    var af = -10;
-    console.log(obj.w[29], obj.w[30]);
-    Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
-    cv.setObj(obj);
-    cv.paint();
-}
-document.getElementById('file-input').addEventListener('change', leerArchivo, false);
-document.getElementById('eyeDown').addEventListener('click', eyeDownFunc, false);
-document.getElementById('eyeUp').addEventListener('click', eyeUpFunc, false);
-document.getElementById('eyeLeft').addEventListener('click', eyeLeftFunc, false);
-document.getElementById('eyeRight').addEventListener('click', eyeRightFunc, false);
-document.getElementById('incrDist').addEventListener('click', incrDistFunc, false);
-document.getElementById('decrDist').addEventListener('click', decrDistFunc, false);
 //movimiento de piezas
-document.getElementById('pza1Izq').addEventListener('click', pza1IzqFunc, false);
-document.getElementById('pza1Der').addEventListener('click', pza1DerFunc, false);
-document.getElementById('pza12Izq').addEventListener('click', pza12IzqFunc, false);
-document.getElementById('pza12Der').addEventListener('click', pza12DerFunc, false);
-var Pix, Piy;
-var Pfx, Pfy;
-var theta = 0.3, phi = 1.3, SensibilidadX = 0.02, SensibilidadY = 0.02;
-var flag = false;
+(_a = document.getElementById('abrir')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', abrir);
+(_b = document.getElementById('cerrar')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', cerrar);
+document.getElementById('izquierda').addEventListener('click', pza1IzqFunc, false);
+document.getElementById('derecha').addEventListener('click', pza1DerFunc, false);
+let Pix, Piy;
+let Pfx, Pfy;
+let theta = 0.3, phi = 1.3, SensibilidadX = 0.02, SensibilidadY = 0.02;
+let flag = false;
 function handleMouse(evento) {
     Pix = evento.offsetX;
     Piy = evento.offsetY;
@@ -149,8 +159,8 @@ function makeVizualization(evento) {
         Pfx = evento.offsetX;
         Pfy = evento.offsetY;
         //console.log(Pfx, Pfy)
-        var difX = Pix - Pfx;
-        var difY = Pfy - Piy;
+        let difX = Pix - Pfx;
+        let difY = Pfy - Piy;
         vp(0, 0.1 * difY / 50, 1);
         Piy = Pfy;
         vp(0.1 * difX, 0 / 50, 1);

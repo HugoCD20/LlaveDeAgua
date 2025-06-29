@@ -23,7 +23,6 @@ window.addEventListener('DOMContentLoaded', () => {
   fetch('./1aallave.txt') // Ruta relativa al archivo
     .then(response => response.text())
     .then(contenido => {
-      mostrarContenido(contenido);
       obj = new Obj3D();
       if (obj.read(contenido)) {
         cv = new CvHLines(graphics, canvas);
@@ -44,7 +43,6 @@ function leerArchivo(e:any) {
   var lector = new FileReader();
   lector.onload = function(e) {
     var contenido = e.target.result;
-    mostrarContenido(contenido);
     obj = new Obj3D();
     if (obj.read(contenido)) {
       //sDir = sDir1;
@@ -56,12 +54,7 @@ function leerArchivo(e:any) {
   lector.readAsText(archivo);
 }
 
-function mostrarContenido(contenido:any) {
-  var elemento = document.getElementById('contenido-archivo');
-  //
-  //readObject(new Input(contenido));
-  elemento.innerHTML = contenido;
-}
+
 
 function vp(dTheta:number, dPhi:number, fRho:number):void{  // Viewpoint
   if (obj != undefined) {
@@ -99,6 +92,8 @@ function decrDistFunc() {
 
 function pza1DerFunc() {
   let af = -45;
+  const output = document.getElementById('output');
+  output.innerText = `Paso ${vueltas + 1}`;
 	Rota3D.initRotate( obj.w[651], obj.w[652], af*Math.PI/180);	
 	if(vueltas<14){
     for (let i = 500; i <= 650; i++){
@@ -109,10 +104,39 @@ function pza1DerFunc() {
     vueltas++
   }
 }
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function abrir() {
+  const btns = document.querySelectorAll("button");
+  btns.forEach(b => b.setAttribute("disabled", "true")); 
+  for (let i = 0; i < 14; i++) {
+    pza1DerFunc();
+    if(vueltas<14){
+      await sleep(500); // espera 1 segundo
+    }
+  }
+  btns.forEach(b => b.removeAttribute("disabled"));
+}
+
+async function cerrar() {
+  const btns = document.querySelectorAll("button");
+  btns.forEach(b => b.setAttribute("disabled", "true")); 
+  for (let i = 0; i < 14; i++) {
+    pza1IzqFunc();
+    if(vueltas>0){
+      await sleep(500); // espera 1 segundo
+    }
+  }
+  btns.forEach(b => b.removeAttribute("disabled"));
+}
+
 
 function pza1IzqFunc() {
     let af = 45;
- 	
+ 	  const output = document.getElementById('output');
+    output.innerText = `Paso ${vueltas + 1}`;
 	Rota3D.initRotate( obj.w[651], obj.w[652], af*Math.PI/180);	
 	if(vueltas>0){
     for (let i = 500; i <= 650; i++){
@@ -123,42 +147,11 @@ function pza1IzqFunc() {
     vueltas--
   }
 }
-function pza12DerFunc() {
-  let af = 10;
-  console.log(obj.w[29], obj.w[30], obj.w[6]);
-  Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
-	
-  for (let i = 101; i <= 140; i++){
-  }
-  for (let i = 201; i <= 238; i++){
-	}
-	cv.setObj(obj);
-  cv.paint();	
-}
-
-function pza12IzqFunc() {
-  let af = -10;
-  console.log(obj.w[29], obj.w[30]);
-	Rota3D.initRotate( obj.w[29], obj.w[30], af*Math.PI/180);	
-	
-	cv.setObj(obj);
-  cv.paint();	
-}
-
-document.getElementById('file-input').addEventListener('change', leerArchivo, false);
-document.getElementById('eyeDown').addEventListener('click', eyeDownFunc, false);
-document.getElementById('eyeUp').addEventListener('click', eyeUpFunc, false);
-document.getElementById('eyeLeft').addEventListener('click', eyeLeftFunc, false);
-document.getElementById('eyeRight').addEventListener('click', eyeRightFunc, false);
-document.getElementById('incrDist').addEventListener('click', incrDistFunc, false);
-document.getElementById('decrDist').addEventListener('click', decrDistFunc, false);
-
-
 //movimiento de piezas
-document.getElementById('pza1Izq').addEventListener('click', pza1IzqFunc, false);
-document.getElementById('pza1Der').addEventListener('click', pza1DerFunc, false);
-document.getElementById('pza12Izq').addEventListener('click', pza12IzqFunc, false);
-document.getElementById('pza12Der').addEventListener('click', pza12DerFunc, false);
+document.getElementById('abrir')?.addEventListener('click', abrir);
+document.getElementById('cerrar')?.addEventListener('click', cerrar);
+document.getElementById('izquierda').addEventListener('click', pza1IzqFunc, false);
+document.getElementById('derecha').addEventListener('click', pza1DerFunc, false);
 
 let Pix: number, Piy: number;
 let Pfx: number, Pfy: number;

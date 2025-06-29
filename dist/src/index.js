@@ -11,6 +11,7 @@ graphics = canvas.getContext('2d');
 var cv;
 var obj;
 var ang = 0;
+var vueltas = 0;
 window.addEventListener('DOMContentLoaded', function () {
     // Simular carga de archivo al iniciar
     fetch('./1aallave.txt') // Ruta relativa al archivo
@@ -81,32 +82,36 @@ function decrDistFunc() {
     vp(0, 0, 0.5);
 }
 function pza1DerFunc() {
-    var af = 10;
-    Rota3D.initRotate(obj.w[313], obj.w[314], af * Math.PI / 180);
-    for (var i = 269; i <= 310; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
+    var af = -45;
+    Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
+    if (vueltas < 14) {
+        for (var i = 500; i <= 650; i++) {
+            obj.w[i] = Rota3D.subir(obj.w[i]);
+        }
+        cv.setObj(obj);
+        cv.paint();
+        vueltas++;
     }
-    cv.setObj(obj);
-    cv.paint();
 }
 function pza1IzqFunc() {
-    var af = -10;
-    Rota3D.initRotate(obj.w[139], obj.w[140], af * Math.PI / 180);
-    for (var i = 201; i <= 238; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
+    var af = 45;
+    Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
+    if (vueltas > 0) {
+        for (var i = 500; i <= 650; i++) {
+            obj.w[i] = Rota3D.bajar(obj.w[i]);
+        }
+        cv.setObj(obj);
+        cv.paint();
+        vueltas--;
     }
-    cv.setObj(obj);
-    cv.paint();
 }
 function pza12DerFunc() {
     var af = 10;
     console.log(obj.w[29], obj.w[30], obj.w[6]);
     Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
     for (var i = 101; i <= 140; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
     }
     for (var i = 201; i <= 238; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
     }
     cv.setObj(obj);
     cv.paint();
@@ -115,12 +120,6 @@ function pza12IzqFunc() {
     var af = -10;
     console.log(obj.w[29], obj.w[30]);
     Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
-    for (var i = 101; i <= 140; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
-    }
-    for (var i = 201; i <= 238; i++) {
-        obj.w[i] = Rota3D.rotate(obj.w[i]);
-    }
     cv.setObj(obj);
     cv.paint();
 }

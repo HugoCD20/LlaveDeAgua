@@ -16,6 +16,7 @@ graphics = canvas.getContext('2d');
 let cv: CvHLines;
 let obj: Obj3D;
 let ang: number=0;
+let vueltas: number=0;
 
 window.addEventListener('DOMContentLoaded', () => {
   // Simular carga de archivo al iniciar
@@ -97,27 +98,30 @@ function decrDistFunc() {
 }
 
 function pza1DerFunc() {
-  let af = 10;
- 	
-	Rota3D.initRotate( obj.w[139], obj.w[140], af*Math.PI/180);	
-	
-  for (let i = 201; i <= 238; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
-	}
-	cv.setObj(obj);
-  cv.paint();	
+  let af = -45;
+	Rota3D.initRotate( obj.w[651], obj.w[652], af*Math.PI/180);	
+	if(vueltas<14){
+    for (let i = 500; i <= 650; i++){
+      obj.w[i] = Rota3D.subir(obj.w[i]);
+    }
+    cv.setObj(obj);
+    cv.paint();	
+    vueltas++
+  }
 }
 
 function pza1IzqFunc() {
-  let af = -10;
+    let af = 45;
  	
-	Rota3D.initRotate( obj.w[139], obj.w[140], af*Math.PI/180);	
-	
-  for (let i = 201; i <= 238; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
-	}
-	cv.setObj(obj);
-  cv.paint();	
+	Rota3D.initRotate( obj.w[651], obj.w[652], af*Math.PI/180);	
+	if(vueltas>0){
+    for (let i = 500; i <= 650; i++){
+      obj.w[i] = Rota3D.bajar(obj.w[i]);
+    }
+    cv.setObj(obj);
+    cv.paint();	
+    vueltas--
+  }
 }
 function pza12DerFunc() {
   let af = 10;
@@ -125,10 +129,8 @@ function pza12DerFunc() {
   Rota3D.initRotate(obj.w[29], obj.w[30], af * Math.PI / 180);
 	
   for (let i = 101; i <= 140; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
   }
   for (let i = 201; i <= 238; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
 	}
 	cv.setObj(obj);
   cv.paint();	
@@ -139,13 +141,6 @@ function pza12IzqFunc() {
   console.log(obj.w[29], obj.w[30]);
 	Rota3D.initRotate( obj.w[29], obj.w[30], af*Math.PI/180);	
 	
-  for (let i = 101; i <= 140; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
-	}
-  for (let i = 201; i <= 238; i++){
-    obj.w[i] = Rota3D.rotate(obj.w[i]);
-	}
-  
 	cv.setObj(obj);
   cv.paint();	
 }

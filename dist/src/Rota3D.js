@@ -47,8 +47,11 @@ var Rota3D = /** @class */ (function () {
         this.r42 = a2 - a1 * this.r12 - a2 * this.r22 - a3 * this.r32;
         this.r43 = a3 - a1 * this.r13 - a2 * this.r23 - a3 * this.r33;
     };
-    Rota3D.rotate = function (p) {
-        return new Point3D(p.x * this.r11 + p.y * this.r21 + p.z * this.r31 + this.r41, p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42, p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43);
+    Rota3D.subir = function (p) {
+        return new Point3D(p.x * this.r11 + p.y * this.r21 + p.z * this.r31 + this.r41, p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42, p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43 + 0.1);
+    };
+    Rota3D.bajar = function (p) {
+        return new Point3D(p.x * this.r11 + p.y * this.r21 + p.z * this.r31 + this.r41, p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42, p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43 - 0.1);
     };
     return Rota3D;
 }());

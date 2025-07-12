@@ -32,6 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
             cv = new CvHLines(graphics, canvas);
             cv.setObj(obj);
             cv.paint();
+            esfera();
         }
     })
         .catch(error => {
@@ -132,13 +133,22 @@ function pza1IzqFunc() {
     output.innerText = `Paso ${vueltas + 1}`;
     Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
     if (vueltas > 0) {
-        for (let i = 500; i <= 650; i++) {
+        for (let i = 500; i <= 816; i++) {
             obj.w[i] = Rota3D.bajar(obj.w[i]);
         }
         cv.setObj(obj);
         cv.paint();
         vueltas--;
     }
+}
+function esfera() {
+    let af = 22.5;
+    Rota3D.initRotate(obj.w[651], obj.w[652], af * Math.PI / 180);
+    for (let i = 657; i <= 796; i++) {
+        obj.w[i + 20] = Rota3D.rota(obj.w[i]);
+    }
+    cv.setObj(obj);
+    cv.paint();
 }
 //movimiento de piezas
 (_a = document.getElementById('abrir')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', abrir);

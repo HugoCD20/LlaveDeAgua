@@ -62,13 +62,13 @@ export class Rota3D{
     return new Point3D(
         p.x * this.r11 + p.y * this.r21 + p.z * this.r31 + this.r41,
         p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42,
-        p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43 +0.1);
+        p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43+0.4);
   }
    static bajar(p: Point3D): Point3D{
     return new Point3D(
         p.x * this.r11 + p.y * this.r21 + p.z * this.r31 + this.r41,
         p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42,
-        p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43 -0.1);
+        p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43);
   }
   static rota(p: Point3D): Point3D{
     return new Point3D(
@@ -76,4 +76,5 @@ export class Rota3D{
         p.x * this.r12 + p.y * this.r22 + p.z * this.r32 + this.r42,
         p.x * this.r13 + p.y * this.r23 + p.z * this.r33 + this.r43);
   }
+  
 }
